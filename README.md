@@ -27,29 +27,24 @@ Clone the repository and follow the instructions below:
     ```bash
     cd ObjectDet_Seg
     ```
-
 3.  **Set up a Conda Environment (Recommended):**
 
-   It's strongly recommended to use a Conda environment to manage dependencies. This ensures that your project's dependencies are isolated and don't conflict with other Python projects.
+    It's strongly recommended to use a Conda environment to manage dependencies. This ensures that your project's dependencies are isolated and don't conflict with other Python projects.
 
     *   **Create the environment:**
+
         ```bash
         conda create -n my-yolo-env python=3.10
         ```
-       *(You can change 'my-yolo-env' to the environment name you prefer)*
+
+        *(You can change 'my-yolo-env' to the environment name you prefer.)*
 
     *   **Activate the environment:**
+
         ```bash
         conda activate my-yolo-env
         ```
-
-    *   **Using an environment.yml (If Provided):**
-        If an `environment.yml` file is included in the repository, you can create and activate the environment in a single step:
-
-        ```bash
-        conda env create -f environment.yml
-        conda activate my-yolo-env # Replace with the environment name in environment.yml
-        ```
+        
 4.  **Install Requirements:**
 
     ```bash
