@@ -44,7 +44,7 @@ Clone the repository and follow the instructions below:
         ```bash
         conda activate my-yolo-env
         ```
-        
+
 4.  **Install Requirements:**
 
     ```bash
@@ -68,5 +68,5 @@ The application supports the following input sources, selectable via the sidebar
 -   **YouTube URL:** Enter a YouTube video URL.
 
 ## Notes
-- The pre-trained YOLOv8 model will be automatically downloaded the first time you run the application.
+- The pre-trained YOLOv11 model will be automatically downloaded the first time you run the application.
 - A "Stop" button in the sidebar allows you to terminate the video processing.
