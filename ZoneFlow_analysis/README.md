@@ -2,112 +2,174 @@
 
 A comprehensive real-time object tracking and zone-based flow analysis application powered by YOLO11/12 and Streamlit.
 
-## Features
+## ✨ Key Features
 
-- 🎯 **Multi-Zone Definition**: Create custom polygonal zones for area-specific tracking
-- 📊 **Real-time Analytics**: Live tracking of object entry/exit counts and current occupancy
-- 🚀 **YOLO11/12 Integration**: Latest Ultralytics YOLO models with segmentation support
-- 📹 **Multiple Video Sources**: Support for webcam, video files, stream URLs, and YouTube videos
-- 🎮 **Interactive Interface**: Easy zone definition with visual feedback
-- 📈 **Rich Visualizations**: Plotly-powered analytics dashboards and charts
+- 🎯 **Smart Zone Definition**: Interactive canvas drawing with polygons/rectangles or manual coordinates
+- 📊 **Live Analytics**: Real-time metrics that update during analysis + detailed charts after stopping
+- 🚀 **YOLO11/12 Integration**: Latest Ultralytics YOLO models with detection and segmentation support
+- 📹 **Multiple Video Sources**: Webcam, video files, stream URLs, and YouTube videos
+- 🎮 **User-Friendly Interface**: Simplified controls with visual feedback and error handling
+- 📈 **Dual Analytics Mode**: Live updating values during analysis + comprehensive dashboard after stopping
 
-## Installation
+## 🚀 Quick Start
 
-1. **Clone the repository** (if not already done)
-2. **Install dependencies**:
+### Installation
+
+1. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
-
-1. **Run the Streamlit app**:
+2. **Run the application**:
    ```bash
    streamlit run streamlit_flow_analytics.py
    ```
 
-2. **Configure the application**:
-   - Select YOLO model (YOLO11 or YOLO12)
-   - Choose model size (nano to extra large)
-   - Set detection parameters (confidence and IoU thresholds)
-   - Select video source (webcam, file, stream, or YouTube)
+### Basic Workflow
 
-3. **Define zones** (Zone Definition mode):
-   - Click "Load Video Frame" to capture a frame
-   - Add zone points manually using coordinates or use the demo zones
-   - Complete zones with at least 3 points
-   - Switch to "Live Analysis" mode
+1. **Configure Model**: Select YOLO11/12 model and size in the sidebar
+2. **Choose Video Source**: Webcam, file upload, stream URL, or YouTube
+3. **Define Zones**: Use interactive canvas or manual coordinates to create tracking zones
+4. **Start Analysis**: Watch live metrics update in real-time
+5. **View Results**: Stop analysis to see detailed charts and history
 
-4. **Start analysis** (Live Analysis mode):
-   - Click "Start Analysis" to begin real-time tracking
-   - Monitor zone entry/exit counts in real-time
-   - View analytics dashboard with charts and metrics
+## 🎯 Zone Definition Options
 
-## Model Options
+### Interactive Canvas Drawing (Recommended)
+- **Polygon Mode**: Click points to create custom shapes, double-click to finish
+- **Rectangle Mode**: Click and drag to create rectangular zones
+- **Visual Feedback**: See zones overlaid on actual video frame
+- **Auto-coordinate Matching**: Zones drawn match exactly with live analysis
+
+### Alternative Methods
+- **Manual Coordinates**: Enter X,Y points manually for precise control
+- **Demo Zones**: Quick test zones for immediate setup
+- **Fallback Support**: Graceful handling if canvas is unavailable
+
+### Zone Features
+- ✅ Unlimited zones per video
+- ✅ Visual zone previews with transparency
+- ✅ Zone validation (minimum 3 points)
+- ✅ Easy zone management (clear, reset, demo)
+
+## 📊 Analytics Dashboard
+
+### Live Analytics (During Analysis)
+- **Real-time Updates**: Metrics update every 10 frames while running
+- **Current Counts**: 🟢 Entries | 🔴 Exits | 👥 Currently Inside
+- **Zone Status**: Individual zone metrics in compact layout
+- **Performance Info**: FPS, frame dimensions, zone count
+
+### Detailed Analytics (After Stopping)
+- **Overall Summary**: Total metrics across all zones
+- **Zone Breakdown**: Individual zone performance with expandable sections
+- **Activity Progress**: Visual progress bars showing relative zone activity
+- **Event History**: Recent entries/exits with timestamps and track IDs
+- **Trends Analysis**: Compare zone performance and occupancy patterns
+
+## 🤖 Model Configuration
 
 ### YOLO11 Models
-- **Detection Models**: `yolo11n.pt`, `yolo11s.pt`, `yolo11m.pt`, `yolo11l.pt`, `yolo11x.pt`
-- **Segmentation Models**: `yolo11n-seg.pt`, `yolo11s-seg.pt`, `yolo11m-seg.pt`, `yolo11l-seg.pt`, `yolo11x-seg.pt`
+| Model | Speed | Accuracy | Use Case |
+|-------|--------|----------|----------|
+| `yolo11n.pt` | ⚡⚡⚡ | ⭐⭐ | Real-time, low-power devices |
+| `yolo11s.pt` | ⚡⚡ | ⭐⭐⭐ | Balanced performance |
+| `yolo11m.pt` | ⚡ | ⭐⭐⭐⭐ | Good accuracy, moderate speed |
+| `yolo11l.pt` | 🐌 | ⭐⭐⭐⭐⭐ | High accuracy applications |
+| `yolo11x.pt` | 🐌🐌 | ⭐⭐⭐⭐⭐⭐ | Maximum accuracy |
 
-### YOLO12 Models (if available)
-- **Detection Models**: `yolo12n.pt`, `yolo12s.pt`, `yolo12m.pt`, `yolo12l.pt`, `yolo12x.pt`
-- **Segmentation Models**: `yolo12n-seg.pt`, `yolo12s-seg.pt`, `yolo12m-seg.pt`, `yolo12l-seg.pt`, `yolo12x-seg.pt`
+### YOLO12 Models
+- Same size options available: `yolo12n.pt`, `yolo12s.pt`, `yolo12m.pt`, `yolo12l.pt`, `yolo12x.pt`
 
-**Model Size Guide:**
-- **n (nano)**: Fastest inference, lowest accuracy
-- **s (small)**: Good balance of speed and accuracy
-- **m (medium)**: Better accuracy, moderate speed  
-- **l (large)**: High accuracy, slower inference
-- **x (extra large)**: Highest accuracy, slowest inference
+### Segmentation Models
+- Add `-seg` suffix for pixel-level object masks: `yolo11n-seg.pt`, `yolo11s-seg.pt`, etc.
+- Provides detailed object boundaries instead of just bounding boxes
 
-## Video Sources
+### Device Options
+- **CPU**: Compatible with all systems, slower processing
+- **CUDA**: GPU acceleration for faster inference (requires NVIDIA GPU)
 
-- **Webcam**: Uses default camera (index 0)
-- **Video File**: Upload MP4, AVI, or MOV files
-- **Stream URL**: Direct video stream URLs (RTSP, HTTP, etc.)
-- **YouTube URL**: Automatically extracts video stream from YouTube links
+## 📹 Video Source Support
 
-## Zone Definition
+### Supported Sources
+- **📷 Webcam**: Default camera or specify camera index
+- **📁 Video Files**: MP4, AVI, MOV formats via file upload
+- **🌐 Stream URLs**: RTSP, HTTP video streams
+- **📺 YouTube**: Automatic stream extraction from YouTube URLs
 
-1. **Interactive Canvas Drawing**: 
-   - **Polygons**: Click points to create custom polygon shapes, double-click to complete
-   - **Rectangles**: Click and drag to create rectangular zones (perfect for doors, windows)
-   - Real-time visual feedback on the video frame
-   
-2. **Manual Coordinate Input**: Enter X,Y coordinates manually (fallback option)
-3. **Demo Zones**: Use pre-defined zones for quick testing
-4. **Visual Zone Preview**: See all zones overlaid on the video with transparency
+### Performance Tips
+- **For Real-time**: Use webcam with nano/small models
+- **For Accuracy**: Use large/extra-large models with video files
+- **For Testing**: Use demo zones with any video source
 
-## Analytics Features
+## ⚙️ Configuration Options
 
-- **Real-time Metrics**: Total entries, exits, current occupancy per zone
-- **Interactive Charts**: Entry/exit comparisons, occupancy heatmaps
-- **Activity Timeline**: Chronological view of zone activities
-- **Recent Activity Log**: Track individual object movements
+### Detection Parameters
+- **Confidence Threshold**: 0.1-0.9 (default: 0.5) - Higher = fewer false positives
+- **IoU Threshold**: 0.1-0.9 (default: 0.45) - Controls detection overlap handling
 
-## Performance Tips
+### Interface Settings
+- **Two Modes**: Zone Definition ↔ Live Analysis
+- **Visual Feedback**: Real-time zone overlays and object tracking
+- **Error Handling**: Graceful fallbacks and helpful error messages
 
-- Use smaller models (nano/small) for real-time performance
-- Reduce video resolution for better FPS
-- Use CPU for testing, GPU for production workloads
-- Adjust confidence thresholds based on your use case
+## 🎮 User Interface
 
-## Troubleshooting
+### Sidebar Controls
+- Model selection and configuration
+- Video source setup
+- Mode switching (Definition ↔ Analysis)
+- Quick analytics summary
+- Zone management tools
 
-- **Model Loading Issues**: Ensure internet connection for first-time model download
-- **Performance Issues**: Try smaller model sizes or reduce video resolution
-- **Zone Definition Problems**: Use demo zones to test before creating custom zones
-- **Video Source Issues**: Verify video source accessibility and format support
+### Main Interface
+- **Zone Definition Mode**: Interactive drawing canvas with video frame
+- **Live Analysis Mode**: Video stream with real-time object tracking
+- **Analytics Section**: Live metrics + detailed dashboard
 
-## Requirements
+## 🔧 Troubleshooting
 
-See `requirements.txt` for complete list of dependencies. Key requirements:
-- Python 3.8+
-- Streamlit 1.28+
-- Ultralytics 8.1+
-- OpenCV 4.8+
-- PyTorch 2.0+
+### Common Issues
+- **Canvas Drawing Problems**: Use manual coordinates or demo zones as fallback
+- **Model Loading Slow**: First download takes time, subsequent loads are faster
+- **Performance Issues**: Try smaller models (nano/small) or reduce video quality
+- **Video Source Failed**: Check file format, URL validity, or camera permissions
 
-## License
+### Performance Optimization
+- **CPU Usage**: Use nano models, reduce video resolution
+- **GPU Usage**: Enable CUDA, use larger models for better accuracy
+- **Memory**: Close other applications, use shorter video clips for testing
 
-This project is part of the AI Workshop CV Demo repository. 
+### Dependencies
+- **Streamlit**: >=1.28.0,<1.30.0 (for canvas compatibility)
+- **OpenCV**: Computer vision operations
+- **Ultralytics**: YOLO model inference
+- **DeepSort**: Object tracking across frames
+
+## 📝 Technical Details
+
+### Object Tracking Pipeline
+1. **YOLO Detection**: Identify objects in each frame
+2. **DeepSort Tracking**: Maintain object identities across frames
+3. **Zone Analysis**: Check object positions against defined zones
+4. **Analytics Update**: Track entries, exits, and current occupancy
+5. **Visual Output**: Render results with bounding boxes and zone overlays
+
+### Zone Coordinate System
+- Zones defined in frame coordinates (0.6 scale factor applied consistently)
+- Direct coordinate mapping between definition and analysis modes
+- No complex transformations - what you draw is what you get
+
+### Performance Metrics
+- **FPS Display**: Real-time processing speed
+- **Frame Info**: Current video dimensions
+- **Zone Count**: Number of active tracking zones
+- **Object Counts**: Live tracking statistics
+
+## 📄 License
+
+This project is part of an AI Workshop CV Demo. Please refer to the main repository for licensing information.
+
+## 🤝 Contributing
+
+This application was developed as part of a computer vision workshop. For improvements or bug reports, please refer to the main repository or create issues with detailed descriptions. 
