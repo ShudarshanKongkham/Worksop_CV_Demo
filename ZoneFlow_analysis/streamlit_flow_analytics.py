@@ -270,6 +270,42 @@ def display_zone_analytics(zone_tracker):
         st.sidebar.error(f"Analytics error: {str(e)}")
         st.sidebar.write("Analytics temporarily unavailable")
 
+def display_live_analytics(zone_tracker):
+    """Display live updating analytics during analysis"""
+    if not zone_tracker.zones:
+        st.info("No zones defined")
+        return
+    
+    try:
+        # Calculate totals
+        total_entries = sum(analytics['entered'] for analytics in zone_tracker.zone_analytics.values())
+        total_exits = sum(analytics['exited'] for analytics in zone_tracker.zone_analytics.values())
+        total_current = sum(analytics['current'] for analytics in zone_tracker.zone_analytics.values())
+        
+        # Display live summary in a compact format
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            st.metric("🟢 Entries", total_entries)
+        with col2:
+            st.metric("🔴 Exits", total_exits)
+        with col3:
+            st.metric("👥 Inside", total_current)
+        
+        # Live zone status
+        if zone_tracker.zone_analytics:
+            st.write("**Zone Status:**")
+            zone_cols = st.columns(min(len(zone_tracker.zones), 4))  # Max 4 columns
+            
+            for i, (zone_id, analytics) in enumerate(zone_tracker.zone_analytics.items()):
+                if zone_id < len(zone_tracker.zones) and i < len(zone_cols):
+                    with zone_cols[i]:
+                        st.write(f"**Zone {zone_id + 1}**")
+                        st.write(f"In: {analytics['entered']} | Out: {analytics['exited']}")
+                        st.write(f"Current: **{analytics['current']}**")
+                        
+    except Exception as e:
+        st.error(f"Live analytics error: {str(e)}")
+
 def create_analytics_dashboard(zone_tracker):
     """Create simple analytics dashboard"""
     if not zone_tracker.zones:
@@ -481,7 +517,7 @@ def main():
         device = st.selectbox("Device", ["cpu", "cuda"], index=0, help="Select CPU for compatibility or CUDA for GPU acceleration")
         
         # Debug: Check model_name type and value
-        st.write(f"Debug - model_name type: {type(model_name)}, value: {model_name}")
+        st.write(f"Model_name : {model_name}")
         
         # Detection parameters
         st.subheader("Detection Parameters")
@@ -868,6 +904,9 @@ def main():
         if len(st.session_state.zone_tracker.zones) == 0:
             st.warning("⚠️ Please define at least one zone before starting analysis")
         
+        # Create live analytics placeholder
+        live_analytics_placeholder = st.empty()
+        
         # Analysis processing loop
         if start_button or st.session_state.get('analysis_running', False):
             st.session_state.analysis_running = True
@@ -914,6 +953,12 @@ def main():
                 # Display frame
                 video_placeholder.image(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), channels="RGB")
                 
+                # Update live analytics every few frames to avoid overwhelming
+                if frame_count % 10 == 0:  # Update every 10 frames
+                    with live_analytics_placeholder.container():
+                        st.subheader("📊 Live Analytics")
+                        display_live_analytics(st.session_state.zone_tracker)
+                
                 # Small delay to prevent overwhelming
                 time.sleep(0.03)
             
@@ -921,10 +966,15 @@ def main():
             st.session_state.analysis_running = False
     
     # Analytics section - moved below video
-    st.header("📊 Analytics Dashboard")
+    st.header("📊 Detailed Analytics Dashboard")
     try:
         if not st.session_state.zone_definition_mode and st.session_state.zone_tracker.zones:
-            create_analytics_dashboard(st.session_state.zone_tracker)
+            # Show detailed analytics (charts and history) after analysis
+            if not st.session_state.get('analysis_running', False):
+                st.info("💡 Detailed analytics with charts and history are shown here after stopping the analysis")
+                create_analytics_dashboard(st.session_state.zone_tracker)
+            else:
+                st.info("🔄 Analysis is running. Live metrics are shown above. Detailed charts will appear after stopping.")
         elif st.session_state.zone_definition_mode:
             st.info("Switch to 'Live Analysis' mode to see real-time analytics")
         else:
